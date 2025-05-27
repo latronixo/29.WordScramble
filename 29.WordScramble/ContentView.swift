@@ -20,12 +20,14 @@ struct ContentView: View {
     }
     func testStrings() -> [String] {
         let input = """
-            a
-            b
-            c
+               a       d    
+              b          d   
+               c         d    
             """
         let letters = input.components(separatedBy: "\n")
-        return letters
+        let letter = letters.randomElement()
+        let trimmed = letter?.trimmingCharacters(in: .whitespacesAndNewlines)
+        return [trimmed ?? ""]
     }
 }
 
