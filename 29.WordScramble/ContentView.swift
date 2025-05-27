@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var usedWords = [String]()
-    @State private var rootWord = ""
-    @State private var newWord = ""
+    @State private var usedWords = [String]()   //использованные слова (нельзя повторяться)
+    @State private var rootWord = ""            //главное слово (из его букв нужно составлять слова)
+    @State private var newWord = ""             //составленное пользователем слово
     
     var body: some View {
         NavigationStack {
@@ -32,6 +32,7 @@ struct ContentView: View {
             }
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
+            .onAppear(perform: startGame)
         }
     }
     
@@ -44,6 +45,22 @@ struct ContentView: View {
             usedWords.insert(answer, at: 0)
         }
         newWord = ""
+    }
+    
+    func startGame() {
+        if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
+            do {
+                if let startWords = try? String(contentsOf: startWordsURL, encoding: .utf8) {
+                    let allWords = startWords.components(separatedBy: "\n")
+                    rootWord = allWords.randomElement() ?? "silkworm"
+                    return
+                }
+            } catch {
+                fatalError("Не удалось загрузить start.txt из Bundle: \(error)")
+            }
+        }
+        
+        
     }
 }
 
