@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    let people = ["Finn", "Leia", "Luke", "Rey"]
+    let people = ["Валя", "Диана", "Эвелина", "Денис"]
     
     var body: some View {
-        List (people, id: \.self) {
-            Text($0)
+        List {
+            Text("Статическая строка")
+            ForEach(people, id: \.self){
+                Text($0)
+            }
+            Text("Статическая строка")
         }
     }
 }
