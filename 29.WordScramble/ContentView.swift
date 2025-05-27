@@ -8,25 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
-    let people = ["Валя", "Диана", "Эвелина", "Денис"]
     
     var body: some View {
         List {
             Text("Статическая строка")
-            ForEach(people, id: \.self){
+            ForEach(testStrings(), id: \.self){
                 Text($0)
             }
             Text("Статическая строка")
         }
     }
-    func testBundles() {
-        if let fileURL = Bundle.main.url(forResource: "somefile", withExtension: "txt") {
-            //мы нашли файл в пакете
-            if let fileContents = try? String(contentsOf: fileURL) {
-                //мы загрузили файл в строку
-                
-            }
-        }
+    func testStrings() -> [String] {
+        let input = """
+            a
+            b
+            c
+            """
+        let letters = input.components(separatedBy: "\n")
+        return letters
     }
 }
 
