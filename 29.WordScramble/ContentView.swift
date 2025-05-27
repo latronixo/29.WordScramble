@@ -19,6 +19,15 @@ struct ContentView: View {
             Text("Статическая строка")
         }
     }
+    func testBundles() {
+        if let fileURL = Bundle.main.url(forResource: "somefile", withExtension: "txt") {
+            //мы нашли файл в пакете
+            if let fileContents = try? String(contentsOf: fileURL) {
+                //мы загрузили файл в строку
+                
+            }
+        }
+    }
 }
 
 #Preview {
