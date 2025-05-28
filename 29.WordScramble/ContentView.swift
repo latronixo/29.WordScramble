@@ -64,6 +64,11 @@ struct ContentView: View {
             return
         }
         
+        guard isEnoughLong(word: answer ) else {
+            wordError(title: "Слишком короткое слово", message: "Меньше трех букв нельзя составлять!")
+            return 
+        }
+        
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
@@ -110,6 +115,11 @@ struct ContentView: View {
         let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
         return misspelledRange.location == NSNotFound
     }
+    
+    //проверка на достаточную длину составленного пользователем слова (короче трех букв запрещено составлять)
+    func isEnoughLong(word: String) -> Bool {
+        return word.count > 2 ? true : false
+     }
     
     //отображение сообщения об ошибке в составленном пользователем слове
     func wordError(title: String, message: String) {
