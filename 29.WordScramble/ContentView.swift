@@ -15,7 +15,9 @@ struct ContentView: View {
     
     @State private var errorTitle = ""          //заголовок окна об ошибке
     @State private var errorMessage = ""        //сообщение окна об ошибке
-    @State private var showingError = false   //флаг отображения сообщения об ошибке
+    @State private var showingError = false     //флаг отображения сообщения об ошибке
+    
+    @State private var score = 0                //счет
     
     var body: some View {
         NavigationStack {
@@ -24,6 +26,8 @@ struct ContentView: View {
                     TextField("Введите ваше слово", text: $newWord)
                         .textInputAutocapitalization(.never)
                 }
+                
+                Text("Ваш счет: \(score)")
                 
                 Section {
                     ForEach(usedWords, id: \.self) { word in
@@ -67,19 +71,25 @@ struct ContentView: View {
         }
         
         guard isPossible(word: answer) else {
-            wordError(title: "Нет такого слова", message: "Давай еще просто постучим по клавиатуре! ")
+            wordError(title: "Нет такого слова", message: "Давай еще просто постучим по клавиатуре!?")
             return
         }
         
-        guard isEnoughLong(word: answer ) else {
+        guard isEnoughLong(word: answer) else {
             wordError(title: "Слишком короткое слово", message: "Меньше трех букв нельзя составлять!")
             return
         }
         
+        //добавляем новое слово в массив использованных слов
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
+        
+        //очищаем textField
         newWord = ""
+        
+        //увеличиваем счет
+        score += usedWords.count + answer.count
     }
     
     //в начале игры загрузим слова из файла в массив и запишем случайное слово из этого массива в rootWord
@@ -89,13 +99,17 @@ struct ContentView: View {
         
         //очищаем textField, в котором возможно записан newWord
         newWord = ""
+        
+        //обнуляем счет
+        score = 0
 
+        //загружаем новое слово
         if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
             do {
                 let startWords = try String(contentsOf: startWordsURL, encoding: .utf8)
                 let allWords = startWords.components(separatedBy: "\n")
                 rootWord = allWords.randomElement() ?? "silkworm"
-                return
+                //return
             } catch {
                 fatalError("Не удалось загрузить start.txt из Bundle: \(error)")
             }
