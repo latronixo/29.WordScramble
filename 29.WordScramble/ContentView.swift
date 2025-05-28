@@ -40,6 +40,13 @@ struct ContentView: View {
             .alert(errorTitle, isPresented: $showingError) { } message: {
                 Text(errorMessage)
             }
+            .toolbar{
+                Button("Start game") {
+                    withAnimation {
+                        startGame()
+                    }
+                }
+            }
         }
     }
     
@@ -66,7 +73,7 @@ struct ContentView: View {
         
         guard isEnoughLong(word: answer ) else {
             wordError(title: "Слишком короткое слово", message: "Меньше трех букв нельзя составлять!")
-            return 
+            return
         }
         
         withAnimation {
@@ -77,6 +84,12 @@ struct ContentView: View {
     
     //в начале игры загрузим слова из файла в массив и запишем случайное слово из этого массива в rootWord
     func startGame() {
+        //если usedWords не пустой, надо его очистить
+        usedWords.removeAll()
+        
+        //очищаем textField, в котором возможно записан newWord
+        newWord = ""
+
         if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
             do {
                 let startWords = try String(contentsOf: startWordsURL, encoding: .utf8)
@@ -87,7 +100,8 @@ struct ContentView: View {
                 fatalError("Не удалось загрузить start.txt из Bundle: \(error)")
             }
         }
-    }
+        
+     }
     
     //проверка на неповторимость (повторяться нельзя)
     func isOriginal(word: String) -> Bool {
